@@ -74,7 +74,6 @@ def parse_property(response: httpx.Response) -> PropertyResult:
     else:
         data['housingdevelopment'] = False
 
-    #TO-DO check features
     # Features
     data["features"] = {}
     #  first we extract each feature block like "Basic Features" or "Amenities"

@@ -22,7 +22,8 @@ Given the property link from "idealista.com" it prints in json format the follow
 - Initial price (if the current price is lower than the initial offer) and percentage difference between initial price and current price
 - Description and comments from the property owner
 - Last date when the listing was updated, in the format of "DD-MM-YYYY"
-- If it belongs to a housing development or not.
+- If it belongs to a housing development or not
+- Features such as basic features of the property, the building and its energy certificate
 
 ### Example Output:
 ```
