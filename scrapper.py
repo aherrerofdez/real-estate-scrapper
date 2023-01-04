@@ -23,8 +23,7 @@ session = httpx.AsyncClient(headers=BASE_HEADERS, follow_redirects=True)
 class PropertyResult(TypedDict):
     url: str
     title: str
-    city: str
-    zone: str
+    location: Dict[str, str]
     currency: str
     price: int
     initialprice: int
@@ -51,8 +50,7 @@ def parse_property(response: httpx.Response) -> PropertyResult:
     # Basic information
     data['title'] = css("h1 .main-info__title-main::text")
     location = css(".main-info__title-minor::text").split(", ")
-    data['city'] = location[1]
-    data['zone'] = location[0]
+    data['location'] = {"city": location[1], "zone": location[0]}
     data['currency'] = css(".info-data-price::text")
     data['price'] = int(css(".info-data-price span::text").replace(".", ""))
     if css(".pricedown_price::text"):
