@@ -72,6 +72,8 @@ def parse_property(response: httpx.Response) -> PropertyResult:
         data['updated'] = date_listing_update[0] + "-" + months_dictionary[date_listing_update[1]] + "-" + str(int(date_today.split("-")[2]) - 1)
     if css(".item-ribbon::text"):
         data['housingdevelopment'] = True
+    else:
+        data['housingdevelopment'] = False
 
     #TO-DO check features and images
     '''# Features

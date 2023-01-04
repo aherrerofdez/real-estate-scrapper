@@ -22,6 +22,7 @@ Given the property link from "idealista.com" it prints in json format the follow
 - Initial price (if the current price is lower than the initial offer) and percentage difference between initial price and current price
 - Description and comments from the property owner
 - Last date when the listing was updated, in the format of "DD-MM-YYYY"
+- If it belongs to a housing development or not.
 
 ### Example Output:
 ```
@@ -35,7 +36,8 @@ Given the property link from "idealista.com" it prints in json format the follow
     "initialprice": 2150000,
     "downpercentage": "9%",
     "description": "Concepto Urbano presenta en exclusiva uno de los pisos más representativos [...]",
-    "updated": "18-12-2022"
+    "updated": "18-12-2022",
+    "housingdevelopment": false
   }
 ```
 
