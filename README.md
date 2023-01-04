@@ -18,10 +18,12 @@ Given the property link from "idealista.com" it prints in json format the follow
   {
     "url": "https://www.idealista.com/inmueble/98776221/",
     "title": "Piso en venta en calle de Juan Bravo, 51",
-    "location": "Lista, Madrid",
+    "zone": "Lista",
+    "city": "Madrid",
     "currency": "€",
     "price": 1950000,
     "initialprice": 2150000,
+    "downpercentage": "9%",
     "description": "Concepto Urbano presenta en exclusiva uno de los pisos más representativos [...]",
     "updated": "18 de diciembre"
   }
