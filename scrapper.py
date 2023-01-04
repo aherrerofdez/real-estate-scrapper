@@ -12,7 +12,7 @@ from datetime import date
 # Property Data
 # -------------------------------------------------
 
-# Establish persisten HTTPX session with browser-like headers to avoid blocking
+# Establish persistent HTTPX session with browser-like headers to avoid blocking
 BASE_HEADERS = {
     "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.124 Safari/537.36",
     "accept-language": "es-ES;es"
@@ -34,6 +34,7 @@ class PropertyResult(TypedDict):
     features: Dict[str, List[str]]
     images: Dict[str, List[str]]
     plans: List[str]
+    housingdevelopment: bool
 
 
 def parse_property(response: httpx.Response) -> PropertyResult:
@@ -69,7 +70,8 @@ def parse_property(response: httpx.Response) -> PropertyResult:
         data['updated'] = date_listing_update[0] + "-" + months_dictionary[date_listing_update[1]] + "-" + date_today.split("-")[2]
     else:
         data['updated'] = date_listing_update[0] + "-" + months_dictionary[date_listing_update[1]] + "-" + str(int(date_today.split("-")[2]) - 1)
-
+    if css(".item-ribbon::text"):
+        data['housingdevelopment'] = True
 
     #TO-DO check features and images
     '''# Features
