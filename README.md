@@ -22,7 +22,7 @@ Given the property link from "idealista.com" it prints in json format the follow
     "currency": "€",
     "price": 1950000,
     "pricedown": 2150000,
-    "description": "Concepto Urbano presenta en exclusiva uno de los pisos más representativos actualmente disponibles en el prestigioso Barrio de Salamanca de Madrid./nSe trata de una vivienda exterior, en perfecto estado de conservación, ubicada en la tercera planta de un magnífico edificio situado en la milla de oro de la calle Juan Bravo de Madrid [...]",
+    "description": "Concepto Urbano presenta en exclusiva uno de los pisos más representativos [...]",
     "updated": "18 de diciembre"
   }
 ```
