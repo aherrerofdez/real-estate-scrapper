@@ -1,5 +1,8 @@
 # Real Estate Scrapper
-Project developed in python to scrap and analyze data obtained from real estate websites (i.e. "idealista.com")
+Project developed in python to scrap and analyze data obtained from real estate websites (i.e. "idealista.com").
+
+**Important Note:**
+> The code currently assumes that the links for the properties provided are in Spanish.
 
 ---
 
