@@ -6,10 +6,10 @@ The code currently assumes that the links for the properties provided are in Spa
 The python version used is 3.10.5.
 
 ### Requirements:
-- httpx: the version used is 0.23.2
+- httpx: the version used is 0.23.2 -->
 ```pip install httpx```
 
-- parsel: the version used is 1.7.0
+- parsel: the version used is 1.7.0 -->
 ```pip install parsel```
 
 ---
