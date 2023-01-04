@@ -14,6 +14,7 @@ Given the property link from "idealista.com" it prints in json format the follow
 - Last date when the listing was updated.
 
 ### Example Output:
+```
   {
     "url": "https://www.idealista.com/inmueble/98776221/",
     "title": "Piso en venta en calle de Juan Bravo, 51",
@@ -24,4 +25,5 @@ Given the property link from "idealista.com" it prints in json format the follow
     "description": "Concepto Urbano presenta en exclusiva uno de los pisos más representativos actualmente disponibles en el prestigioso Barrio de Salamanca de Madrid./nSe trata de una vivienda exterior, en perfecto estado de conservación, ubicada en la tercera planta de un magnífico edificio situado en la milla de oro de la calle Juan Bravo de Madrid [...]",
     "updated": "18 de diciembre"
   }
+```
 
