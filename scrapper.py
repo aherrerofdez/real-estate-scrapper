@@ -2,7 +2,6 @@ import httpx
 import asyncio
 import json
 
-
 from parsel import Selector
 from typing import Dict, List
 from typing_extensions import TypedDict

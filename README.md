@@ -1,9 +1,16 @@
 # Real Estate Scrapper
 Project developed in python to scrap and analyze data obtained from real estate websites (i.e. "idealista.com").
 
-#### **Important Note:**
-
+### Important Note:
 The code currently assumes that the links for the properties provided are in Spanish.
+The python version used is 3.10.5.
+
+### Requirements:
+- httpx: the version used is 0.23.2
+```pip install httpx```
+
+- parsel: the version used is 1.7.0
+```pip install parsel```
 
 ---
 
