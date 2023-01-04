@@ -21,7 +21,7 @@ Given the property link from "idealista.com" it prints in json format the follow
     "location": "Lista, Madrid",
     "currency": "€",
     "price": 1950000,
-    "pricedown": 2150000,
+    "initialprice": 2150000,
     "description": "Concepto Urbano presenta en exclusiva uno de los pisos más representativos [...]",
     "updated": "18 de diciembre"
   }

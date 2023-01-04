@@ -19,15 +19,16 @@ BASE_HEADERS = {
 }
 session = httpx.AsyncClient(headers=BASE_HEADERS, follow_redirects=True)
 
-# TO-DO add pricedown and change percentage
 # TO-DO check other data to be retrieved and analyzed
 class PropertyResult(TypedDict):
     url: str
     title: str
-    location: str
+    city: str
+    zone: str
     currency: str
     price: int
-    pricedown: int
+    initialprice: int
+    downpercentage: str
     description: str
     updated: str
     features: Dict[str, List[str]]
@@ -37,7 +38,7 @@ class PropertyResult(TypedDict):
 
 def parse_property(response: httpx.Response) -> PropertyResult:
     """parse Idealista.com property page"""
-    # load response's HTML tree for parsing:
+    # Load response's HTML tree for parsing:
     selector = Selector(text=response.text)
     css = lambda x: selector.css(x).get("").strip()
     css_all = lambda x: selector.css(x).getall()
@@ -48,12 +49,14 @@ def parse_property(response: httpx.Response) -> PropertyResult:
 
     # Basic information
     data['title'] = css("h1 .main-info__title-main::text")
-    data['location'] = css(".main-info__title-minor::text")
+    location = css(".main-info__title-minor::text").split(", ")
+    data['city'] = location[1]
+    data['zone'] = location[0]
     data['currency'] = css(".info-data-price::text")
     data['price'] = int(css(".info-data-price span::text").replace(".", ""))
-    # TO-DO add pricedown percentage
     if css(".pricedown_price::text"):
-        data['pricedown'] = int(css(".pricedown_price::text").replace(".", "").replace("€", ""))
+        data['initialprice'] = int(css(".pricedown_price::text").replace(".", "").replace("€", ""))
+        data['downpercentage'] = css(".pricedown_icon::text")
     # TO-DO if description comment is expandable, check for duplicated text
     data['description'] = "/n".join(css_all(".comment p::text")).strip()
     # TO-DO clean updated date from text to date format
@@ -100,7 +103,7 @@ async def scrape_properties(urls: List[str]) -> List[PropertyResult]:
     """Scrape Idealista.com properties"""
     properties = []
     to_scrape = [session.get(url) for url in urls]
-    for response in asyncio.as_completed(to_scrape):
+    for response in to_scrape:
         response = await response
         if response.status_code != 200:
             print(f"can't scrape property: {response.url}")
@@ -120,4 +123,5 @@ async def execute_main():
     print(json.dumps(data, indent=2, ensure_ascii=False))
 
 if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(execute_main())
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    asyncio.run(execute_main())
