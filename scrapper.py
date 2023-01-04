@@ -57,8 +57,8 @@ def parse_property(response: httpx.Response) -> PropertyResult:
     if css(".pricedown_price::text"):
         data['initialprice'] = int(css(".pricedown_price::text").replace(".", "").replace("€", ""))
         data['downpercentage'] = css(".pricedown_icon::text")
-    # TO-DO if description comment is expandable, check for duplicated text
-    data['description'] = "/n".join(css_all(".comment p::text")).strip()
+    # Avoid duplicated text description if there's more than one listing belonging to the same housing development
+    data['description'] = css_all(".comment p")[0].replace("<p>", "").replace("</p>", "").replace("<br>", "/n").strip()
     # TO-DO clean updated date from text to date format
     data['updated'] = selector.xpath(
         "//p[@class='stats-text']"
