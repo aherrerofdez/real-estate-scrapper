@@ -6,6 +6,7 @@ import json
 from parsel import Selector
 from typing import Dict, List
 from typing_extensions import TypedDict
+from datetime import date
 
 
 # -------------------------------------------------
@@ -59,11 +60,16 @@ def parse_property(response: httpx.Response) -> PropertyResult:
         data['downpercentage'] = css(".pricedown_icon::text")
     # Avoid duplicated text description if there's more than one listing belonging to the same housing development
     data['description'] = css_all(".comment p")[0].replace("<p>", "").replace("</p>", "").replace("<br>", "/n").strip()
-    # TO-DO clean updated date from text to date format
-    data['updated'] = selector.xpath(
-        "//p[@class='stats-text']"
-        "[contains(text(),'actualizado el')]/text()"
-    ).get("").split(" el ")[-1]
+    date_listing_update = css(".stats-text::text").split(" el ")[-1].split(" de ")
+    # Date Format: DD-MM-YYYY
+    date_today = date.today().strftime("%d-%m-%Y")
+    current_month = int(date_today.split("-")[1])
+    months_dictionary = {'enero': "01", 'febrero': "02", 'marzo': "03", 'abril': "04", 'mayo': "05", 'junio': "06",
+                         'julio': "07", 'agosto': "08", 'septiembre': "09", 'octubre': "10", 'noviembre': "11", 'diciembre': "12"}
+    if current_month >= int(months_dictionary[date_listing_update[1]]):
+        data['updated'] = date_listing_update[0] + "-" + months_dictionary[date_listing_update[1]] + "-" + date_today.split("-")[2]
+    else:
+        data['updated'] = date_listing_update[0] + "-" + months_dictionary[date_listing_update[1]] + "-" + str(int(date_today.split("-")[2]) - 1)
 
 
     #TO-DO check features and images
