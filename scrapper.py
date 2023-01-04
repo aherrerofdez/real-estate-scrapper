@@ -1,6 +1,7 @@
 import httpx
 import asyncio
 import json
+import re
 
 from parsel import Selector
 from typing import Dict, List
@@ -73,19 +74,31 @@ def parse_property(response: httpx.Response) -> PropertyResult:
     else:
         data['housingdevelopment'] = False
 
-    #TO-DO check features and images
-    '''# Features
+    #TO-DO check features
+    # Features
     data["features"] = {}
     #  first we extract each feature block like "Basic Features" or "Amenities"
-    for feature_block in result.selector.css(".details-property-h3"):
-        # then for each block we extract all bullet points underneath them
-        label = feature_block.xpath("text()").get()
-        features = feature_block.xpath("following-sibling::div[1]//li")
-        data["features"][label] = [
-            ''.join(feat.xpath(".//text()").getall()).strip()
-            for feat in features
-        ]
+    for feature_type_list in css_all(".details-property_features ul"):
+        index =  css_all(".details-property_features ul").index(feature_type_list)
+        feature_label = css_all(".details-property-h3::text")[index]
+        features_list_raw = feature_type_list.split("</li>")
+        features_list = []
+        for feature in features_list_raw:
+            if "\n" in feature:
+                feature = feature.replace("\n", "")
+            if "<ul>" in feature:
+                feature = feature.replace("<ul>", "")
+            if "</ul>" in feature:
+                feature = feature.replace("</ul>", "")
+            if "<span>" in feature and "</span>" in feature:
+                feature = feature.split("<span>")[1].split("</span>")[0]
+            if feature != "":
+                features_list.append(feature.replace("<li>", ""))
+        data["features"][feature_label] = features_list
 
+
+    #TO-DO check images
+    '''
     # Images
     # the images are tucked away in a javascript variable.
     # We can use regular expressions to find the variable and parse it as a dictionary:

@@ -40,6 +40,30 @@ Given the property link from "idealista.com" it prints in json format the follow
     "description": "Concepto Urbano presenta en exclusiva uno de los pisos más representativos [...]",
     "updated": "18-12-2022",
     "housingdevelopment": false
+    "features": {
+      "Características básicas": [
+        "268 m² construidos",
+        "4 habitaciones",
+        "5 baños",
+        "Terraza",
+        "Balcón",
+        "Plaza de garaje incluida en el precio",
+        "Segunda mano/buen estado",
+        "Armarios empotrados",
+        "Trastero",
+        "Calefacción central"
+      ],
+      "Edificio": [
+        "Planta 3ª exterior",
+        "Con ascensor"
+      ],
+      "Equipamiento": [
+        "Aire acondicionado"
+      ],
+      "Certificado energético": [
+        "En trámite"
+      ]
+    }
   }
 ```
 
