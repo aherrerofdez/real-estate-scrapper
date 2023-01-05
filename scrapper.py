@@ -21,6 +21,8 @@ BASE_HEADERS = {
 session = httpx.AsyncClient(headers=BASE_HEADERS, follow_redirects=True)
 
 # TO-DO check other data to be retrieved and analyzed
+# Add price per square meter and community expenses
+# Add property owner contact details: phone and name
 class PropertyResult(TypedDict):
     url: str
     title: str
@@ -75,7 +77,7 @@ def parse_property(response: httpx.Response) -> PropertyResult:
         data['housingdevelopment'] = False
 
     # Features
-    data["features"] = {}
+    data['features'] = {}
     #  first we extract each feature block like "Basic Features" or "Amenities"
     for feature_type_list in css_all(".details-property_features ul"):
         index =  css_all(".details-property_features ul").index(feature_type_list)
@@ -93,28 +95,49 @@ def parse_property(response: httpx.Response) -> PropertyResult:
                 feature = feature.split("<span>")[1].split("</span>")[0]
             if feature != "":
                 features_list.append(feature.replace("<li>", ""))
-        data["features"][feature_label] = features_list
+        data['features'][feature_label] = features_list
 
 
-    #TO-DO check images
-    '''
-    # Images
-    # the images are tucked away in a javascript variable.
-    # We can use regular expressions to find the variable and parse it as a dictionary:
-    image_data = re.findall(
-        "fullScreenGalleryPics\s*:\s*(\[.+?\]),", 
-        response.text
-    )[0]
-    # we also need to replace unquoted keys to quoted keys (i.e. title -> "title"):
-    images = json.loads(re.sub(r'(\w+?):([^/])', r'"\1":\2', image_data))
-    data['images'] = defaultdict(list)
+    data['images'] = {}
+    images_raw_data = re.findall("fullScreenGalleryPics\s*:\s*(\[.+?\]),", response.text)[0]
+    images_data = images_raw_data[1:-1].split("},")
+    for img in images_data:
+        index = images_data.index(img)
+        if img[-1] != "}":
+            new_img_data = img + "}"
+        if ':' in new_img_data:
+            if '":' in new_img_data:
+                images_data[index] = new_img_data.replace('":', ':')
+            images_data[index] = images_data[index].replace(':', '":').replace('":/', ':/')
+        new_img_data = images_data[index]
+        if ',' in new_img_data:
+            if ',"' in new_img_data:
+                images_data[index] = new_img_data.replace(',"', ',')
+            images_data[index] = images_data[index].replace(',', ',"').replace('," ', ', ')
+        if ',"WEB_DETAIL' in images_data[index]:
+            images_data[index] = images_data[index].replace(',"WEB_DETAIL', '')
+        if images_data[index][1] != '"':
+            images_data[index] = '{"' + images_data[index][1:]
+    
     data['plans'] = []
-    for image in images:
-        url = urljoin(str(response.url), image['imageUrl'])
-        if image['isPlan']:
-            data['plans'].append(url)
-        else:
-            data['images'][image['tag']].append(url)'''
+    image_tags = []
+    for img_data in images_data:
+        img_data_json = json.loads(img_data)
+        if img_data_json['isPlan']:
+            data['plans'].append(img_data_json['imageDataService'])
+            continue
+        if img_data_json['tag'] not in image_tags:
+            image_tags.append(img_data_json['tag'])
+            data['images'][img_data_json['tag']] = []
+        
+        for tag in image_tags:
+            images_by_tag_list = data['images'][tag]
+            if tag == img_data_json['tag']:
+                if img_data_json['imageDataService'] not in images_by_tag_list:
+                    images_by_tag_list.append(img_data_json['imageDataService'])
+                data['images'][tag] = images_by_tag_list
+
+    
     return data
 
 
